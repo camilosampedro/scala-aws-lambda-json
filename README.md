@@ -13,6 +13,7 @@ Then you can use it in your `build.sbt` as:
 libraryDependencies += "io.camilosampedro" %% "scala-aws-lambda-json" % "0.1"
 ```
 
+## Usage
 You can use this library to get the requests from Lambda as your case classes. You just need to implement `io.github.camilosampedro.lambda.RequestHandler[I, O]`.
 
 ```scala
