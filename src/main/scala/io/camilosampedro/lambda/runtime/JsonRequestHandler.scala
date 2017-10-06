@@ -75,6 +75,9 @@ abstract class JsonRequestHandler[I, O](implicit decoder: Decoder[I], encoder: E
   }
 }
 
+/**
+  * Static helper methods.
+  */
 object JsonRequestHandler {
   private def extractString(is: InputStream): String = scala.io.Source.fromInputStream(is).mkString
 
