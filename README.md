@@ -1,6 +1,18 @@
 # scala-aws-lambda-json library
 [![Build Status](https://travis-ci.org/camilosampedro/scala-aws-lambda-json.svg?branch=master)](https://travis-ci.org/camilosampedro/scala-aws-lambda-json)
 
+## Note
+To use it, as it is not published to maven, you need to clone this repository and issue:
+
+```bash
+sbt publishLocal
+```
+
+Then you can use it in your `build.sbt` as:
+```scala
+libraryDependencies += "io.camilosampedro" %% "scala-aws-lambda-json" % "0.1"
+```
+
 You can use this library to get the requests from Lambda as your case classes. You just need to implement `io.github.camilosampedro.lambda.RequestHandler[I, O]`.
 
 ```scala

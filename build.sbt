@@ -4,7 +4,7 @@ version := "0.1"
 
 scalaVersion := "2.12.3"
 
-organization      := "io.github.camilosampedro"
+organization      := "io.camilosampedro"
 
 publishMavenStyle := true
 
