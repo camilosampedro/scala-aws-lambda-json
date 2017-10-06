@@ -1,4 +1,4 @@
-name := "lambda-tests"
+name := "scala-aws-lambda-json"
 
 version := "0.1"
 
@@ -18,7 +18,13 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser"
 ).map(_ % circeVersion)
 
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+
 assemblyMergeStrategy in assembly := {
   case PathList("META-INF", xs @ _*) => MergeStrategy.discard
   case x => MergeStrategy.first
 }
+
+addCompilerPlugin(
+  "org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full
+)

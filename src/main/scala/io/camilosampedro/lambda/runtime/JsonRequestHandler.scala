@@ -5,10 +5,10 @@ import java.io.{InputStream, OutputStream}
 import io.circe.generic.auto._
 import io.circe.syntax._
 import io.camilosampedro.lambda.model.ErrorMessage
-
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 import io.circe.parser.decode
-import RequestHandler._
+import JsonRequestHandler._
+import io.circe.{Decoder, Encoder}
 
 /**
   * Scala RequestHandler.
@@ -18,7 +18,7 @@ import RequestHandler._
   * @tparam I Input type
   * @tparam O Output type
   */
-trait RequestHandler[I, O] extends RequestStreamHandler {
+abstract class JsonRequestHandler[I, O](implicit decoder: Decoder[I], encoder: Encoder[O]) extends RequestStreamHandler {
 
   /**
     * Handles a request with I JSON format and uses a user defined flow to produce a O JSON object.
@@ -40,7 +40,7 @@ trait RequestHandler[I, O] extends RequestStreamHandler {
     // Get the String from the raw InputStream
     val rawString = extractString(input)
     // Decode the JSON content and put it into the I class
-    val resultMessage = decode[I](rawString) match {
+    val resultMessage = decode[I](rawString)(decoder) match {
       case Right(json) =>
         // If there is indeed a json with this format, perform the request handling
         val result = handleRequest(json, context)
@@ -69,13 +69,13 @@ trait RequestHandler[I, O] extends RequestStreamHandler {
   private def convertToByteArray(resultMessage: Either[ErrorMessage, O]): Array[Byte] = {
     val json = resultMessage match {
       case Left(l) => l.asJson
-      case Right(r) => r.asJson
+      case Right(r) => r.asJson(encoder)
     }
     json.noSpaces.toCharArray.map(_.toByte)
   }
 }
 
-object RequestHandler {
+object JsonRequestHandler {
   private def extractString(is: InputStream): String = scala.io.Source.fromInputStream(is).mkString
 
   private def closeOutput(outputStream: OutputStream): Unit = {
